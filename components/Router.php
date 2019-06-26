@@ -6,7 +6,7 @@ class Router {
 
 	public function __construct() 
 	{
-		$routesPath = ROOT.'/Source Files/config/routes.php';
+		$routesPath = ROOT.'/config/routes.php';
 		$this->routes = include($routesPath);
 	}
 
@@ -22,10 +22,11 @@ class Router {
 	}
 	public function run()
 	{
+                    
 		// Получить строку запроса
 		$uri = $this->getURI();
-
-		// Проверить наличие такого запроса в Routes.php
+                             
+                // Проверить наличие такого запроса в Routes.php
 		foreach ($this->routes as $uriPattern => $path) {
 
 			// Сравниваем $uriPattern & $uri
@@ -33,8 +34,8 @@ class Router {
 			{
 				// Получаем внутренний путь из внешнего согласно правилу 
 				$internalRoute = preg_replace("~$uriPattern~", $path, $uri);
-
-				// Если есть совпадение, определить какой контроллер и action обрабатывает запрос
+                                
+                                // Если есть совпадение, определить какой контроллер и action обрабатывает запрос
 				$segments = explode('/', $internalRoute);
 
 				$controllerName = ucfirst(array_shift($segments).'Controller');
@@ -44,7 +45,7 @@ class Router {
 				$parameters = $segments;
 
 				// Подключить файл класса-контроллера
-				$controllerFile = ROOT.'/Source Files/controllers/'.$controllerName.'.php';
+				$controllerFile = ROOT.'/controllers/'.$controllerName.'.php';
 
 				if(file_exists($controllerFile)) 
 				{
@@ -54,7 +55,7 @@ class Router {
 				// 	Создать объект, вызвать метод (т.е. action)
 				$controllerObject = new $controllerName;
 
-				$result = call_user_func_array(array($controllerObject, $actionName), $parameters);
+                                $result = call_user_func_array(array($controllerObject, $actionName), $parameters);
 
 				if ($result != null) 
 				{
